@@ -79,3 +79,9 @@ dist
 
 # IDE
 .idea
+
+# direnv
+.envrc
+
+# dotenv
+.env
