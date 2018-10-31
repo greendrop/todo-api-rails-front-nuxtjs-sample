@@ -7,13 +7,14 @@ services:
       USER_ID: ${USER_ID}
       GROUP_ID: ${GROUP_ID}
       HOST: 0.0.0.0
+      PORT: 3001
     volumes:
       - .:/app
       - home_volume:/home/docker
       - node_home_volume:/home/node
     working_dir: /app
     ports:
-      - '3001:3000'
+      - '3001:3001'
     hostname: front
     entrypoint: ./docker/front/docker-entrypoint.sh
     command: yarn run dev
