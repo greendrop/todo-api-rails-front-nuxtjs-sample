@@ -37,19 +37,27 @@ module.exports = {
   /*
   ** Plugins to load before mounting the App
   */
-  plugins: ['@/plugins/vuetify'],
+  plugins: ['@/plugins/vuetify', '~/plugins/vee-validate'],
 
   /*
   ** Nuxt.js modules
   */
   modules: ['@nuxtjs/axios', '@nuxtjs/auth', '@nuxtjs/dotenv'],
+
+  /*
+  ** axios configuration
+  */
   axios: {},
+
+  /*
+  ** auth configuration
+  */
   auth: {
     redirect: {
       login: '/users/sign_in',
       logout: '/users/sign_in',
       callback: '/auth/callback',
-      home: '/',
+      home: '/'
     },
     strategies: {
       doorkeeper: {
@@ -65,6 +73,9 @@ module.exports = {
     }
   },
 
+  /*
+  ** router configuration
+  */
   router: {
     middleware: ['auth']
   },
