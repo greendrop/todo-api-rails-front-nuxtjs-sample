@@ -77,10 +77,7 @@ const config: Configuration = {
   /*
    ** Build configuration
    */
-  buildModules: [
-    '@nuxt/typescript-build',
-    '@nuxtjs/dotenv'
-  ],
+  buildModules: ['@nuxt/typescript-build', '@nuxtjs/dotenv'],
   build: {
     transpile: ['vuetify/lib'],
     plugins: [new VuetifyLoaderPlugin()],
