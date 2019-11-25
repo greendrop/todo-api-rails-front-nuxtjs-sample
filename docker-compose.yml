@@ -7,27 +7,17 @@ services:
       USER_ID: ${USER_ID}
       GROUP_ID: ${GROUP_ID}
       HOST: 0.0.0.0
-      PORT: 3001
+      PORT: 3030
     volumes:
-      - .:/app
+      - .:/app:cached
       - home_volume:/home/docker
-      - node_home_volume:/home/node
     working_dir: /app
     ports:
-      - '3001:3001'
+      - '3030:3030'
     hostname: front
     entrypoint: ./docker/front/docker-entrypoint.sh
     command: yarn run dev
-    networks:
-      - default
-      - todo-api-rails-sample_default
-
-networks:
-  todo-api-rails-sample_default:
-    external: true
 
 volumes:
   home_volume:
-    driver: local
-  node_home_volume:
     driver: local

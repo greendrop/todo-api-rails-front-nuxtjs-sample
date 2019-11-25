@@ -1,12 +1,17 @@
-<template>
-  <button @click="signIn">Sign in</button>
+<template lang="pug">
+  div
 </template>
 
-<script>
-export default {
-  methods: {
-    signIn() {
-      this.$auth.loginWith('doorkeeper')
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator'
+
+@Component
+export default class Index extends Vue {
+  mounted() {
+    if (this.$auth.loggedIn) {
+      this.$auth.redirect('home')
+    } else {
+      this.$auth.loginWith(process.env.AUTH_STRATEGY_NAME)
     }
   }
 }
