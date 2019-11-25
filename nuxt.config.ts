@@ -6,6 +6,7 @@ import pkg from './package'
 require('dotenv').config()
 
 const config: Configuration = {
+  srcDir: 'src',
   mode: 'universal',
 
   /*
@@ -54,7 +55,6 @@ const config: Configuration = {
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
     '@nuxtjs/auth',
-    '@nuxtjs/dotenv',
     '@nuxtjs/toast',
     'nuxt-logger',
     'cookie-universal-nuxt',
@@ -74,6 +74,36 @@ const config: Configuration = {
       }
     ]
   ],
+  /*
+   ** Build configuration
+   */
+  buildModules: [
+    '@nuxt/typescript-build',
+    '@nuxtjs/dotenv'
+  ],
+  build: {
+    transpile: ['vuetify/lib'],
+    plugins: [new VuetifyLoaderPlugin()],
+    loaders: {
+      stylus: {
+        import: ['~assets/style/variables.styl']
+      }
+    },
+    /*
+     ** You can extend webpack config here
+     */
+    extend(config: any, ctx: any) {
+      // Run ESLint on save
+      if (ctx.isDev && ctx.isClient) {
+        config.module.rules.push({
+          enforce: 'pre',
+          test: /\.(js|vue)$/,
+          loader: 'eslint-loader',
+          exclude: /(node_modules)/
+        })
+      }
+    }
+  },
   /*
    ** Axios module configuration
    */
@@ -121,32 +151,12 @@ const config: Configuration = {
   },
 
   /*
-   ** Build configuration
+   ** dotenv configuration
    */
-  buildModules: ['@nuxt/typescript-build'],
-  build: {
-    transpile: ['vuetify/lib'],
-    plugins: [new VuetifyLoaderPlugin()],
-    loaders: {
-      stylus: {
-        import: ['~assets/style/variables.styl']
-      }
-    },
-    /*
-     ** You can extend webpack config here
-     */
-    extend(config: any, ctx: any) {
-      // Run ESLint on save
-      if (ctx.isDev && ctx.isClient) {
-        config.module.rules.push({
-          enforce: 'pre',
-          test: /\.(js|vue)$/,
-          loader: 'eslint-loader',
-          exclude: /(node_modules)/
-        })
-      }
-    }
+  dotenv: {
+    path: './'
   },
+
   manifest: {
     name: pkg.name,
     short_name: pkg.name,

@@ -25,7 +25,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import NavigationListComponent from '../components/organisms/NavigationListComponent.vue'
+import NavigationListComponent from '~/components/organisms/NavigationListComponent.vue'
 
 @Component({ components: { NavigationListComponent } })
 export default class Default extends Vue {
