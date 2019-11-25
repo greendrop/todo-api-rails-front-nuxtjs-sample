@@ -6,5 +6,5 @@
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component
-export default class Index extends Vue {}
+export default class Callback extends Vue {}
 </script>

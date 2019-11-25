@@ -80,8 +80,11 @@ dist
 # IDE
 .idea
 
+# Service worker
+sw.*
+
 # direnv
 .envrc
 
-# dotenv
-.env
+# mac 
+.DS_Store

@@ -1,69 +1,50 @@
-<template>
-  <v-layout
-    row
-    wrap>
-    <v-flex
-      xs12
-      sm12
-      md12>
-      <form>
-        <v-text-field
-          v-validate="'required|max:255'"
-          v-model="task.title"
-          :counter="255"
-          :error-messages="errors.collect('title')"
-          label="Title"
-          data-vv-name="title"
-          required />
-        <v-textarea
-          v-model="task.description"
-          label="Description"
-          data-vv-name="description" />
-        <v-switch
-          v-model="task.done"
-          label="Done" />
-        <v-btn @click="submit">submit</v-btn>
-        <v-btn @click="clear">clear</v-btn>
-      </form>
-    </v-flex>
-  </v-layout>
+<template lang="pug">
+  v-layout(row wrap)
+    v-flex(xs12 sm12 md12)
+      v-layout(row wrap)
+        v-flex(xs12 sm12 md12 mb-1)
+          v-breadcrumbs(:items="breadcrumbItems")
+
+    v-flex(xs12 sm12 md12)
+      v-layout(row wrap)
+        v-flex(xs12 sm12 md12 mb-1)
+          .headline
+            = "{{ $t('labels.newModel', { model: $t('models.task') }) }}"
+
+    task-new-component
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      task: {
-        title: '',
-        description: '',
-        done: false
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator'
+import TaskNewComponent from '~/components/organisms/TaskNewComponent.vue'
+
+@Component({ components: { TaskNewComponent }, middleware: 'auth' })
+export default class New extends Vue {
+  get breadcrumbItems(): { [key: string]: any }[] {
+    return [
+      {
+        text: this.$i18n.t('labels.home'),
+        to: '/',
+        exact: true,
+        disabled: false
+      },
+      {
+        text: this.$i18n.t('labels.listModel', {
+          model: this.$i18n.t('models.task')
+        }),
+        to: '/tasks',
+        exact: true,
+        disabled: false
+      },
+      {
+        text: this.$i18n.t('labels.newModel', {
+          model: this.$i18n.t('models.task')
+        }),
+        to: '/tasks/new',
+        exact: true,
+        disabled: true
       }
-    }
-  },
-  methods: {
-    submit() {
-      this.$validator.validateAll().then(async result => {
-        if (result) {
-          const accessToken = this.$auth.getToken('doorkeeper')
-          await this.$store.dispatch('tasks/createTask', {
-            accessToken: accessToken,
-            task: this.task
-          })
-          if (this.$store.getters['tasks/createCompleted']) {
-            this.clear()
-            this.$router.push('/tasks')
-          }
-        }
-      })
-    },
-    clear() {
-      this.task = {
-        title: '',
-        description: '',
-        done: false
-      }
-      this.$validator.reset()
-    }
+    ]
   }
 }
 </script>

@@ -1,58 +1,66 @@
-<template>
-  <v-layout
-    row
-    wrap>
-    <v-flex
-      xs12
-      sm12
-      md12>
-      <v-card>
-        <v-card-title>
-          <v-layout
-            row
-            wrap>
-            <v-flex
-              xs12
-              sm12
-              md12>
-              {{ task.title }}
-            </v-flex>
-            <v-flex
-              xs12
-              sm12
-              md12>
-              {{ task.description }}
-            </v-flex>
-            <v-flex
-              xs12
-              sm12
-              md12>
-              {{ task.done }}
-            </v-flex>
-          </v-layout>
-        </v-card-title>
-      </v-card>
-    </v-flex>
-  </v-layout>
+<template lang="pug">
+  v-layout(row wrap)
+    v-flex(xs12 sm12 md12)
+      v-layout(row wrap)
+        v-flex(xs12 sm12 md12 mb-1)
+          v-breadcrumbs(:items="breadcrumbItems")
+
+    v-flex(xs12 sm12 md12)
+      v-layout(row wrap)
+        v-flex(xs12 sm12 md12 mb-1)
+          .headline
+            | {{ $t('labels.showModel', { model: $t('models.task') }) }}
+
+    task-detail-component(:task="task")
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      task: null
-    }
-  },
-  async asyncData(context) {
-    const accessToken = context.app.$auth.getToken('doorkeeper')
-    await context.store.dispatch('tasks/getTaskById', {
-      accessToken: accessToken,
-      id: context.route.params.id
-    })
-    let data = {
-      task: context.store.getters['tasks/task']
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator'
+import { Context } from '@nuxt/types'
+import TaskDetailComponent from '~/components/organisms/TaskDetailComponent.vue'
+import { ITask, Task } from '~/models/task'
+import { tasksStore } from '~/store'
+
+@Component({
+  components: { TaskDetailComponent },
+  middleware: 'auth',
+  async asyncData(context: Context) {
+    await tasksStore.getTaskById({ id: parseInt(context.route.params.id) })
+    const data = {
+      task: tasksStore.task
     }
     return data
+  }
+})
+export default class Index extends Vue {
+  task: ITask = new Task()
+
+  get breadcrumbItems(): { [key: string]: any }[] {
+    const id = this.$route.params.id
+    return [
+      {
+        text: this.$i18n.t('labels.home'),
+        to: '/',
+        exact: true,
+        disabled: false
+      },
+      {
+        text: this.$i18n.t('labels.listModel', {
+          model: this.$i18n.t('models.task')
+        }),
+        to: '/tasks',
+        exact: true,
+        disabled: false
+      },
+      {
+        text: this.$i18n.t('labels.showModel', {
+          model: this.$i18n.t('models.task')
+        }),
+        to: `/tasks/${id}`,
+        exact: true,
+        disabled: true
+      }
+    ]
   }
 }
 </script>

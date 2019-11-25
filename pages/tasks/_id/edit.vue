@@ -1,81 +1,74 @@
-<template>
-  <v-layout
-    row
-    wrap>
-    <v-flex
-      xs12
-      sm12
-      md12>
-      <form>
-        <v-text-field
-          v-validate="'required|max:255'"
-          v-model="task.title"
-          :counter="255"
-          :error-messages="errors.collect('title')"
-          label="Title"
-          data-vv-name="title"
-          required />
-        <v-textarea
-          v-model="task.description"
-          label="Description"
-          data-vv-name="description" />
-        <v-switch
-          v-model="task.done"
-          label="Done" />
-        <v-btn @click="submit">submit</v-btn>
-        <v-btn @click="clear">clear</v-btn>
-      </form>
-    </v-flex>
-  </v-layout>
+<template lang="pug">
+  v-layout(row wrap)
+    v-flex(xs12 sm12 md12)
+      v-layout(row wrap)
+        v-flex(xs12 sm12 md12 mb-1)
+          v-breadcrumbs(:items="breadcrumbItems")
+
+    v-flex(xs12 sm12 md12)
+      v-layout(row wrap)
+        v-flex(xs12 sm12 md12 mb-3)
+          .headline
+            | {{ $t('labels.editModel', { model: $t('models.task') }) }}
+
+    task-edit-component(:task.sync="task")
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      task: {
-        title: '',
-        description: '',
-        done: false
-      }
-    }
-  },
-  async asyncData(context) {
-    const accessToken = context.app.$auth.getToken('doorkeeper')
-    await context.store.dispatch('tasks/getTaskById', {
-      accessToken: accessToken,
-      id: context.route.params.id
-    })
-    let data = {
-      task: { ...context.store.getters['tasks/task'] }
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator'
+import { Context } from '@nuxt/types'
+import TaskEditComponent from '~/components/organisms/TaskEditComponent.vue'
+import { ITask, Task } from '~/models/task'
+import { tasksStore } from '~/store'
+
+@Component({
+  components: { TaskEditComponent },
+  middleware: 'auth',
+  async asyncData(context: Context) {
+    await tasksStore.getTaskById({ id: parseInt(context.route.params.id) })
+    const data = {
+      task: tasksStore.task
     }
     return data
-  },
-  methods: {
-    submit() {
-      this.$validator.validateAll().then(async result => {
-        if (result) {
-          const accessToken = this.$auth.getToken('doorkeeper')
-          await this.$store.dispatch('tasks/updateTask', {
-            accessToken: accessToken,
-            id: this.$route.params.id,
-            task: this.task
-          })
-          if (this.$store.getters['tasks/updateCompleted']) {
-            this.clear()
-            this.$router.push('/tasks')
-          }
-        }
-      })
-    },
-    clear() {
-      this.task = {
-        title: '',
-        description: '',
-        done: false
+  }
+})
+export default class Edit extends Vue {
+  task: ITask = new Task()
+
+  get breadcrumbItems(): { [key: string]: any }[] {
+    const id = this.$route.params.id
+    return [
+      {
+        text: this.$i18n.t('labels.home'),
+        to: '/',
+        exact: true,
+        disabled: false
+      },
+      {
+        text: this.$i18n.t('labels.listModel', {
+          model: this.$i18n.t('models.task')
+        }),
+        to: '/tasks',
+        exact: true,
+        disabled: false
+      },
+      {
+        text: this.$i18n.t('labels.showModel', {
+          model: this.$i18n.t('models.task')
+        }),
+        to: `/tasks/${id}`,
+        exact: true,
+        disabled: false
+      },
+      {
+        text: this.$i18n.t('labels.editModel', {
+          model: this.$i18n.t('models.task')
+        }),
+        to: `/tasks/${id}/edit`,
+        exact: true,
+        disabled: true
       }
-      this.$validator.reset()
-    }
+    ]
   }
 }
 </script>

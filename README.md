@@ -1,6 +1,6 @@
-# todo-api-rails-front-nuxt-sample
+# todo-pwa-sample
 
-> My great Nuxt.js project
+> My laudable Nuxt.js project
 
 ## Build Setup
 
