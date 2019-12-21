@@ -25,6 +25,11 @@ jobs:
           paths:
             - ./node_modules
 
+      # run yarn run test
+      - run:
+          name: yarn run test
+          command: yarn run test
+
       # run yarn run lint
       - run:
           name: yarn run lint
