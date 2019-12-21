@@ -31,7 +31,10 @@ describe('getList', () => {
     await TaskRepository.getList({})
       .then(response => {
         assert.strictEqual(response.status, 200)
-        assert.deepStrictEqual(response.data, camelcaseKeys(tasks, { deep: true }))
+        assert.deepStrictEqual(
+          response.data,
+          camelcaseKeys(tasks, { deep: true })
+        )
       })
       .catch((_error: AxiosError) => {
         throw new Error('failed')
@@ -70,7 +73,10 @@ describe('get', () => {
     await TaskRepository.get(1)
       .then(response => {
         assert.strictEqual(response.status, 200)
-        assert.deepStrictEqual(response.data, camelcaseKeys(task, { deep: true }))
+        assert.deepStrictEqual(
+          response.data,
+          camelcaseKeys(task, { deep: true })
+        )
       })
       .catch((_error: AxiosError) => {
         throw new Error('failed')
@@ -114,7 +120,10 @@ describe('create', () => {
     await TaskRepository.create(taskForm)
       .then(response => {
         assert.strictEqual(response.status, 201)
-        assert.deepStrictEqual(response.data, camelcaseKeys(task, { deep: true }))
+        assert.deepStrictEqual(
+          response.data,
+          camelcaseKeys(task, { deep: true })
+        )
       })
       .catch((_error: AxiosError) => {
         throw new Error('failed')
