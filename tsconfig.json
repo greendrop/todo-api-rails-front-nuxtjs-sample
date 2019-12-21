@@ -13,16 +13,17 @@
     "sourceMap": true,
     "strict": true,
     "noEmit": true,
-    "baseUrl": ".",
+    "baseUrl": "./src/",
     "paths": {
       "~/*": [
-        "./src/*"
+        "./*"
       ],
       "@/*": [
-        "./src/*"
+        "./*"
       ]
     },
     "types": [
+      "@types/jest",
       "@types/node",
       "@nuxt/types",
       "@nuxtjs/toast",
