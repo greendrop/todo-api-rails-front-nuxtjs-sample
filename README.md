@@ -1,22 +1,27 @@
-# todo-pwa-sample
+# todo-api-rails-front-nuxtjs-sample
 
-> My laudable Nuxt.js project
+Nuxt.jsを使用したAPIを利用するサンプルです。
+APIは https://github.com/greendrop/todo-api-rails-sample を使用します。
 
-## Build Setup
+## セットアップ
 
-``` bash
-# install dependencies
+```shell
+$ git clone git@github.com:greendrop/todo-api-rails-front-nuxtjs-sample.git
+$ cd todo-api-rails-front-nuxtjs-sample
+$ vi .envrc
+$ direnv allow
+$ docker-compose pull
+$ docker-compose build
+$ docker-compose run --rm front bash
+$ cp .env.example .env
 $ yarn install
-
-# serve with hot reload at localhost:3000
-$ yarn run dev
-
-# build for production and launch server
-$ yarn run build
-$ yarn start
-
-# generate static project
-$ yarn run generate
+$ exit
+$ docker-compose up
 ```
 
-For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
+### .envrc
+
+```
+export USER_ID=`id -u`
+export GROUP_ID=`id -g`
+```
