@@ -5,6 +5,8 @@ import { ITaskForm } from '~/models/task-form'
 import { IPaginateMeta, PaginateMeta } from '~/models/paginate-meta'
 import TaskRepository from '~/repositories/task-repository'
 
+export { TaskRepository }
+
 @Module({
   name: 'tasks',
   stateFactory: true,
@@ -127,13 +129,13 @@ export default class Tasks extends VuexModule {
   async createTask({ taskForm }: { taskForm: ITaskForm }) {
     await TaskRepository.create(taskForm)
       .then(response => {
-        this.context.commit('setTask', response.data)
+        this.context.commit('setTask', new Task(response.data))
         this.context.commit('setCreated', true)
         this.context.commit('setErrorStatus', null)
         this.context.commit('setErrorData', null)
       })
       .catch((error: AxiosError) => {
-        this.context.commit('setCompleted', false)
+        this.context.commit('setCreated', false)
         this.context.commit(
           'setErrorStatus',
           error.response ? error.response.status : null
