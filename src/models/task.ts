@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import { ITaskForm, TaskForm } from './task-form'
 
 export interface ITask {
@@ -7,6 +8,7 @@ export interface ITask {
   done: boolean
   createdAt: string
   updatedAt: string
+  equals(task: ITask): boolean
   toTaskForm(): ITaskForm
 }
 
@@ -22,6 +24,10 @@ export class Task implements ITask {
     if (init) {
       Object.assign(this, init)
     }
+  }
+
+  equals(task: ITask): boolean {
+    return _.isEqual(this, task)
   }
 
   toTaskForm(): ITaskForm {

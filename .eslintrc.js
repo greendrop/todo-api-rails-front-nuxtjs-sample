@@ -18,5 +18,13 @@ module.exports = {
   ],
   // add your custom rules here
   rules: {
-  }
+  },
+  overrides: [
+    {
+      files: ['**/*.test.ts'],
+      rules: {
+        'promise/param-names': 'off'
+      }
+    }
+  ]
 }
