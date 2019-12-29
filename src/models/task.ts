@@ -9,6 +9,7 @@ export interface ITask {
   createdAt: string
   updatedAt: string
   equals(task: ITask): boolean
+  clone(): ITask
   toTaskForm(): ITaskForm
 }
 
@@ -28,6 +29,10 @@ export class Task implements ITask {
 
   equals(task: ITask): boolean {
     return _.isEqual(this, task)
+  }
+
+  clone(): ITask {
+    return _.cloneDeep(this)
   }
 
   toTaskForm(): ITaskForm {

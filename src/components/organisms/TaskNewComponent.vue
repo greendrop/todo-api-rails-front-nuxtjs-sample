@@ -20,29 +20,30 @@ import { Component, Vue } from 'vue-property-decorator'
 import { ITask, Task } from '~/models/task'
 import { ITaskForm } from '~/models/task-form'
 import TaskFormComponent from '~/components/molecules/TaskFormComponent.vue'
-import { tasksStore } from '~/store'
+import { TasksStore } from '~/store'
 
 @Component({ components: { TaskFormComponent } })
 export default class TaskNewComponent extends Vue {
+  tasksStore = TasksStore
   task: ITask = new Task()
   taskForm: ITaskForm = this.task.toTaskForm()
 
-  submit() {
-    this.$validator.validateAll().then(async result => {
+  async submit() {
+    await this.$validator.validateAll().then(async result => {
       if (result) {
-        await tasksStore.createTask({ taskForm: this.taskForm })
-        if (tasksStore.created) {
+        await this.tasksStore.createTask({ taskForm: this.taskForm })
+        if (this.tasksStore.created) {
           const message = this.$t('messages.createModel', {
             model: this.$t('models.task')
           }).toString()
           this.$toast.success(message)
-          const task = tasksStore.task
+          const task = this.tasksStore.task
           this.$router.push(`/tasks/${task.id}`)
         } else {
           const message = this.$t('messages.errorOccurred').toString()
           this.$toast.error(message)
-          this.$log.error(tasksStore.errorStatus)
-          this.$log.error(tasksStore.errorData)
+          this.$log.error(this.tasksStore.errorStatus)
+          this.$log.error(this.tasksStore.errorData)
         }
       }
     })

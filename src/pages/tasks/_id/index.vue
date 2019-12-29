@@ -19,15 +19,15 @@ import { Component, Vue } from 'vue-property-decorator'
 import { Context } from '@nuxt/types'
 import TaskDetailComponent from '~/components/organisms/TaskDetailComponent.vue'
 import { ITask, Task } from '~/models/task'
-import { tasksStore } from '~/store'
+import { TasksStore } from '~/store'
 
 @Component({
   components: { TaskDetailComponent },
   middleware: 'auth',
   async asyncData(context: Context) {
-    await tasksStore.getTaskById({ id: parseInt(context.route.params.id) })
+    await TasksStore.getTaskById({ id: parseInt(context.route.params.id) })
     const data = {
-      task: tasksStore.task
+      task: TasksStore.task
     }
     return data
   }

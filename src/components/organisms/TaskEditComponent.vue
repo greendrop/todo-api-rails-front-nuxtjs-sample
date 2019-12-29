@@ -17,14 +17,15 @@
 
 <script lang="ts">
 import { Component, Prop, Watch, Vue } from 'vue-property-decorator'
-import _ from 'lodash'
 import { ITask, Task } from '~/models/task'
 import { ITaskForm, TaskForm } from '~/models/task-form'
 import TaskFormComponent from '~/components/molecules/TaskFormComponent.vue'
-import { tasksStore } from '~/store'
+import { TasksStore } from '~/store'
 
 @Component({ components: { TaskFormComponent } })
 export default class TaskEditComponent extends Vue {
+  tasksStore = TasksStore
+
   @Prop({ type: Object, required: true })
   task: ITask
 
@@ -33,8 +34,8 @@ export default class TaskEditComponent extends Vue {
 
   @Watch('task', { deep: true })
   onChangeTask(val: ITask, oldVal: ITask) {
-    if (!_.isEqual(val, oldVal)) {
-      this.localTask = _.cloneDeep(val)
+    if (!val.equals(oldVal)) {
+      this.localTask = val.clone()
     }
   }
 
@@ -48,14 +49,14 @@ export default class TaskEditComponent extends Vue {
     this.taskForm = this.localTask.toTaskForm()
   }
 
-  submit() {
-    this.$validator.validateAll().then(async result => {
+  async submit() {
+    await this.$validator.validateAll().then(async result => {
       if (result) {
-        await tasksStore.updateTask({
+        await this.tasksStore.updateTask({
           id: this.task.id,
           taskForm: this.taskForm
         })
-        if (tasksStore.updated) {
+        if (this.tasksStore.updated) {
           const message = this.$t('messages.updateModel', {
             model: this.$t('models.task')
           }).toString()
@@ -64,8 +65,8 @@ export default class TaskEditComponent extends Vue {
         } else {
           const message = this.$t('messages.errorOccurred').toString()
           this.$toast.error(message)
-          this.$log.error(tasksStore.errorStatus)
-          this.$log.error(tasksStore.errorData)
+          this.$log.error(this.tasksStore.errorStatus)
+          this.$log.error(this.tasksStore.errorData)
         }
       }
     })

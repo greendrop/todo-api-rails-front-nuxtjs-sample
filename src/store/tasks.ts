@@ -5,14 +5,13 @@ import { ITaskForm } from '~/models/task-form'
 import { IPaginateMeta, PaginateMeta } from '~/models/paginate-meta'
 import TaskRepository from '~/repositories/task-repository'
 
-export { TaskRepository }
-
 @Module({
   name: 'tasks',
   stateFactory: true,
   namespaced: true
 })
 export default class Tasks extends VuexModule {
+  taskRepository = TaskRepository
   tasks: ITask[] = []
   tasksMeta: IPaginateMeta = new PaginateMeta()
   task: ITask | null = null

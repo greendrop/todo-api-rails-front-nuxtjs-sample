@@ -28,7 +28,6 @@
 
 <script lang="ts">
 import { Component, Prop, Watch, Vue } from 'vue-property-decorator'
-import _ from 'lodash'
 import { ITaskForm, TaskForm } from '~/models/task-form'
 
 @Component
@@ -40,8 +39,8 @@ export default class TaskFormComponent extends Vue {
 
   @Watch('taskForm')
   onChangeTaskForm(val: ITaskForm, oldVal: ITaskForm) {
-    if (!_.isEqual(val, oldVal)) {
-      this.localTaskForm = _.cloneDeep(val)
+    if (!val.equals(oldVal)) {
+      this.localTaskForm = val.clone()
     }
   }
 

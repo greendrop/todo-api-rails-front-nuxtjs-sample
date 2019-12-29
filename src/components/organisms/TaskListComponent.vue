@@ -28,10 +28,11 @@
 <script lang="ts">
 import { Component, Watch, Vue } from 'vue-property-decorator'
 import { ITask } from '~/models/task'
-import { tasksStore } from '~/store'
+import { TasksStore } from '~/store'
 
 @Component
 export default class TaskListComponent extends Vue {
+  tasksStore = TasksStore
   taskHeaders: { [key: string]: any }[] = []
   tasks: ITask[] = []
   taskTotalCount = 0
@@ -83,17 +84,17 @@ export default class TaskListComponent extends Vue {
       }
       params.q.s = `${sortBy} ${descending ? 'desc' : 'asc'}`
     }
-    await tasksStore.getTasks({ params })
+    await this.tasksStore.getTasks({ params })
 
-    if (!tasksStore.got) {
+    if (!this.tasksStore.got) {
       const message = this.$t('messages.errorOccurred').toString()
       this.$toast.error(message)
-      this.$log.error(tasksStore.errorStatus)
-      this.$log.error(tasksStore.errorData)
+      this.$log.error(this.tasksStore.errorStatus)
+      this.$log.error(this.tasksStore.errorData)
     }
 
-    this.tasks = tasksStore.tasks
-    const tasksMeta = tasksStore.tasksMeta
+    this.tasks = this.tasksStore.tasks
+    const tasksMeta = this.tasksStore.tasksMeta
     this.taskTotalCount = tasksMeta.totalCount
     this.taskLoading = false
   }
@@ -108,10 +109,8 @@ export default class TaskListComponent extends Vue {
 
   async deleteTask(task: ITask) {
     if (confirm(this.$t('messages.destroyConfirm').toString())) {
-      await this.$store.dispatch('tasks/deleteTask', {
-        id: task.id
-      })
-      if (this.$store.getters['tasks/deleted']) {
+      await this.tasksStore.deleteTask({ id: task.id })
+      if (this.tasksStore.deleted) {
         const message = this.$t('messages.destroyModel', {
           model: this.$t('models.task')
         }).toString()
@@ -120,8 +119,8 @@ export default class TaskListComponent extends Vue {
       } else {
         const message = this.$t('messages.errorOccurred').toString()
         this.$toast.error(message)
-        this.$log.error(this.$store.getters['tasks/errorStatus'])
-        this.$log.error(this.$store.getters['tasks/errorData'])
+        this.$log.error(this.tasksStore.errorStatus)
+        this.$log.error(this.tasksStore.errorData)
       }
     }
   }

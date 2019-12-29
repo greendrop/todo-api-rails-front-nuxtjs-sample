@@ -35,6 +35,6 @@ export default class Default extends Vue {
   miniVariant: boolean = false
   right: boolean = true
   rightDrawer: boolean = false
-  title: string = 'Todo PWA Sample'
+  title: string = 'Todo Sample'
 }
 </script>

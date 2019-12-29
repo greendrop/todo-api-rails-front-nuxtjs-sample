@@ -5,6 +5,7 @@ export interface ITaskForm {
   description: string | null
   done: boolean
   equals(taskForm: ITaskForm): boolean
+  clone(): ITaskForm
 }
 
 export class TaskForm implements ITaskForm {
@@ -20,5 +21,9 @@ export class TaskForm implements ITaskForm {
 
   equals(taskForm: ITaskForm): boolean {
     return _.isEqual(this, taskForm)
+  }
+
+  clone(): ITaskForm {
+    return _.cloneDeep(this)
   }
 }
