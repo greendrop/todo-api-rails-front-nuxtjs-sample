@@ -93,9 +93,7 @@ describe('tasks', () => {
 
         await tasksStore.getTaskById({ id: 1 })
         assert.strictEqual(tasksStore.got, true)
-        if (tasksStore.task) {
-          assert.strictEqual(tasksStore.task.equals(new Task(task)), true)
-        }
+        assert.strictEqual(tasksStore.task.equals(new Task(task)), true)
       })
 
       test('error', async () => {
@@ -139,9 +137,7 @@ describe('tasks', () => {
 
         await tasksStore.createTask({ taskForm })
         assert.strictEqual(tasksStore.created, true)
-        if (tasksStore.task) {
-          assert.strictEqual(tasksStore.task.equals(new Task(task)), true)
-        }
+        assert.strictEqual(tasksStore.task.equals(new Task(task)), true)
       })
 
       test('error', async () => {
