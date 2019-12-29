@@ -61,7 +61,7 @@ export default class TaskDetailComponent extends Vue {
   tasksStore = TasksStore
 
   @Prop({ type: Object, required: true })
-  task: ITask
+  task!: ITask
 
   editTask(task: ITask) {
     this.$router.push(`/tasks/${task.id}/edit`)
