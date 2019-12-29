@@ -3,11 +3,11 @@ import { getModule } from 'vuex-module-decorators'
 import Tasks from '~/store/tasks'
 
 /* eslint-disable import/no-mutable-exports */
-let tasksStore: Tasks
+let TasksStore: Tasks
 /* eslint-enable import/no-mutable-exports */
 
 function initialiseStores(store: Store<any>): void {
-  tasksStore = getModule(Tasks, store)
+  TasksStore = getModule(Tasks, store)
 }
 
-export { initialiseStores, tasksStore }
+export { initialiseStores, TasksStore }

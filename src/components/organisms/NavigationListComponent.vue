@@ -47,12 +47,12 @@ export default class TaskFormComponent extends Vue {
     return (this as any).$auth.loggedIn
   }
 
-  signIn() {
-    this.$auth.loginWith(process.env.AUTH_STRATEGY_NAME)
+  async signIn() {
+    await this.$auth.loginWith(process.env.AUTH_STRATEGY_NAME)
   }
 
-  signOut() {
-    this.$auth.logout().then(() => {
+  async signOut() {
+    await this.$auth.logout().then(() => {
       this.$toast.success(this.$i18n.t('messages.signedOut').toString())
     })
   }

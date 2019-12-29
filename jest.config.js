@@ -12,8 +12,12 @@ module.exports = {
   },
   collectCoverage: true,
   collectCoverageFrom: [
-    '<rootDir>/components/**/*.vue',
-    '<rootDir>/pages/**/*.vue'
+    '<rootDir>/src/components/**/*.vue',
+    '<rootDir>/src/models/**/*.ts',
+    '<rootDir>/src/pages/**/*.vue',
+    '<rootDir>/src/layouts/**/*.vue',
+    '<rootDir>/src/repositories/**/*.ts',
+    '<rootDir>/src/store/**/*.ts'
   ],
   setupFiles: ['dotenv/config']
 }

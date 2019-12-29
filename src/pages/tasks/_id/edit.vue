@@ -19,20 +19,21 @@ import { Component, Vue } from 'vue-property-decorator'
 import { Context } from '@nuxt/types'
 import TaskEditComponent from '~/components/organisms/TaskEditComponent.vue'
 import { ITask, Task } from '~/models/task'
-import { tasksStore } from '~/store'
+import { TasksStore } from '~/store'
 
 @Component({
   components: { TaskEditComponent },
   middleware: 'auth',
   async asyncData(context: Context) {
-    await tasksStore.getTaskById({ id: parseInt(context.route.params.id) })
+    await TasksStore.getTaskById({ id: parseInt(context.route.params.id) })
     const data = {
-      task: tasksStore.task
+      task: TasksStore.task
     }
     return data
   }
 })
 export default class Edit extends Vue {
+  tasksStore = TasksStore
   task: ITask = new Task()
 
   get breadcrumbItems(): { [key: string]: any }[] {

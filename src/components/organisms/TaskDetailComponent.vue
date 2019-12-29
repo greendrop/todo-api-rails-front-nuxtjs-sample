@@ -54,10 +54,12 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import { ITask } from '~/models/task'
-import { tasksStore } from '~/store'
+import { TasksStore } from '~/store'
 
 @Component
 export default class TaskDetailComponent extends Vue {
+  tasksStore = TasksStore
+
   @Prop({ type: Object, required: true })
   task: ITask
 
@@ -67,9 +69,9 @@ export default class TaskDetailComponent extends Vue {
 
   async deleteTask(task: ITask) {
     if (confirm(this.$t('messages.destroyConfirm').toString())) {
-      await tasksStore.deleteTask({ id: task.id })
+      await this.tasksStore.deleteTask({ id: task.id })
 
-      if (tasksStore.deleted) {
+      if (this.tasksStore.deleted) {
         const message = this.$t('messages.destroyModel', {
           model: this.$t('models.task')
         }).toString()
@@ -78,8 +80,8 @@ export default class TaskDetailComponent extends Vue {
       } else {
         const message = this.$t('messages.errorOccurred').toString()
         this.$toast.error(message)
-        this.$log.error(tasksStore.errorStatus)
-        this.$log.error(tasksStore.errorData)
+        this.$log.error(this.tasksStore.errorStatus)
+        this.$log.error(this.tasksStore.errorData)
       }
     }
   }
