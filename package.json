@@ -30,6 +30,7 @@
     "nuxt": "^2.10.1",
     "nuxt-i18n": "^6.3.0",
     "nuxt-logger": "^0.2.0",
+    "nuxt-property-decorator": "^2.5.0",
     "qs": "^6.9.0",
     "snakecase-keys": "^3.1.0",
     "vee-validate": "^2.2.15",
@@ -74,7 +75,6 @@
     "stylus-loader": "^3.0.2",
     "ts-jest": "^24.2.0",
     "vue-jest": "^3.0.5",
-    "vue-property-decorator": "^8.3.0",
     "vuex-module-decorators": "^0.10.1"
   }
 }

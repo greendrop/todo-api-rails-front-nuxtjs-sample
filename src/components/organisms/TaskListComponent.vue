@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Watch, Vue } from 'vue-property-decorator'
+import { Component, Watch, Vue } from 'nuxt-property-decorator'
 import { ITask } from '~/models/task'
 import { TasksStore } from '~/store'
 

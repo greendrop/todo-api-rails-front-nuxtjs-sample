@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue } from 'nuxt-property-decorator'
 import { Context } from '@nuxt/types'
 import TaskEditComponent from '~/components/organisms/TaskEditComponent.vue'
 import { ITask, Task } from '~/models/task'
