@@ -79,6 +79,12 @@ const config: Configuration = {
    */
   buildModules: ['@nuxt/typescript-build', '@nuxtjs/dotenv'],
   build: {
+    babel: {
+      plugins: [
+        ['@babel/plugin-proposal-decorators', { legacy: true }],
+        ['@babel/plugin-proposal-class-properties', { loose: true }]
+      ]
+    },
     transpile: ['vuetify/lib'],
     plugins: [new VuetifyLoaderPlugin()],
     loaders: {

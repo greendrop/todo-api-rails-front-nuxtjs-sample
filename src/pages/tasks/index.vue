@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue } from 'nuxt-property-decorator'
 import TaskListComponent from '~/components/organisms/TaskListComponent.vue'
 
 @Component({ components: { TaskListComponent }, middleware: 'auth' })

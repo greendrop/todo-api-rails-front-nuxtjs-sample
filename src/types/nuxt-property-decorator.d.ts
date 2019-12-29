@@ -1,4 +1,4 @@
-import Vue from 'vue-property-decorator'
+import Vue from 'nuxt-property-decorator'
 import VueI18n, { IVueI18n } from 'vue-i18n'
 import { Toasted } from 'vue-toasted'
 
