@@ -33,7 +33,7 @@ import { ITaskForm, TaskForm } from '~/models/task-form'
 @Component
 export default class TaskFormComponent extends Vue {
   @Prop({ type: Object, required: true })
-  taskForm: ITaskForm
+  taskForm!: ITaskForm
 
   localTaskForm: ITaskForm = new TaskForm()
 

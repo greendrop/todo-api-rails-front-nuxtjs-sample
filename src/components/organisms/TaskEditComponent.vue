@@ -27,7 +27,7 @@ export default class TaskEditComponent extends Vue {
   tasksStore = TasksStore
 
   @Prop({ type: Object, required: true })
-  task: ITask
+  task!: ITask
 
   localTask: ITask = new Task()
   taskForm: ITaskForm = new TaskForm()
