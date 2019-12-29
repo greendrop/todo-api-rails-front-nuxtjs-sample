@@ -14,7 +14,7 @@ export default class Tasks extends VuexModule {
   taskRepository = TaskRepository
   tasks: ITask[] = []
   tasksMeta: IPaginateMeta = new PaginateMeta()
-  task: ITask | null = null
+  task: ITask = new Task()
   got: boolean = false
   created: boolean = false
   updated: boolean = false
@@ -33,7 +33,7 @@ export default class Tasks extends VuexModule {
   }
 
   @Mutation
-  setTask(task: ITask | null) {
+  setTask(task: ITask) {
     this.task = task
   }
 
@@ -111,7 +111,8 @@ export default class Tasks extends VuexModule {
         this.context.commit('setErrorData', null)
       })
       .catch((error: AxiosError) => {
-        this.context.commit('setTask', null)
+        const task = new Task()
+        this.context.commit('setTask', task)
         this.context.commit('setGot', false)
         this.context.commit(
           'setErrorStatus',
