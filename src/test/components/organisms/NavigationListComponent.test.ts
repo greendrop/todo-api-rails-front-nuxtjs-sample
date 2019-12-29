@@ -50,6 +50,9 @@ describe('NavigationListComponent', () => {
     const wrapper = shallowMount(NavigationListComponent, {
       i18n,
       localVue,
+      stubs: {
+        'client-only': true
+      },
       mocks: {
         $auth: auth,
         $toast: toast
