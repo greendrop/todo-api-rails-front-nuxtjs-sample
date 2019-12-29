@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Watch, Vue } from 'vue-property-decorator'
+import { Component, Prop, Watch, Vue } from 'nuxt-property-decorator'
 import { ITaskForm, TaskForm } from '~/models/task-form'
 
 @Component
