@@ -48,8 +48,8 @@ import { TasksStore } from '~/store'
 export default class Index extends Vue {
   tasksStore = TasksStore
   task: ITask = new Task()
-  taskLoading: boolean = false
-  requestGetTask: boolean = false
+  taskLoading = true
+  requestGetTask = false
 
   async mounted() {
     if (this.requestGetTask) {
