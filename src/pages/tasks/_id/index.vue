@@ -11,7 +11,12 @@
           .headline
             | {{ $t('labels.showModel', { model: $t('models.task') }) }}
 
-    task-detail-component(:task="task")
+    template(v-if="taskLoading")
+      v-flex(xs12 sm12 md12)
+        .text-xs-center
+          v-progress-circular(indeterminate)
+    template(v-else)
+      task-detail-component(:task="task")
 </template>
 
 <script lang="ts">
@@ -25,15 +30,32 @@ import { TasksStore } from '~/store'
   components: { TaskDetailComponent },
   middleware: 'auth',
   async asyncData(context: Context) {
-    await TasksStore.getTaskById({ id: parseInt(context.route.params.id) })
     const data = {
-      task: TasksStore.task
+      task: new Task(),
+      taskLoading: false,
+      requestGetTask: false
+    }
+    if (process.client) {
+      data.requestGetTask = true
+    } else {
+      await TasksStore.getTaskById({ id: parseInt(context.route.params.id) })
+      data.task = TasksStore.task
+      data.taskLoading = false
     }
     return data
   }
 })
 export default class Index extends Vue {
+  tasksStore = TasksStore
   task: ITask = new Task()
+  taskLoading = true
+  requestGetTask = false
+
+  async mounted() {
+    if (this.requestGetTask) {
+      await this.getTask()
+    }
+  }
 
   get breadcrumbItems(): { [key: string]: any }[] {
     const id = this.$route.params.id
@@ -61,6 +83,21 @@ export default class Index extends Vue {
         disabled: true
       }
     ]
+  }
+
+  async getTask() {
+    this.taskLoading = true
+    await this.tasksStore.getTaskById({ id: parseInt(this.$route.params.id) })
+
+    if (!this.tasksStore.got) {
+      const message = this.$t('messages.errorOccurred').toString()
+      this.$toast.error(message)
+      this.$log.error(this.tasksStore.errorStatus)
+      this.$log.error(this.tasksStore.errorData)
+    }
+
+    this.task = TasksStore.task
+    this.taskLoading = false
   }
 }
 </script>

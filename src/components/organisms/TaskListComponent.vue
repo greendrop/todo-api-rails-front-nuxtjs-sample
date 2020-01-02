@@ -3,9 +3,10 @@
     v-data-table(
       :headers="taskHeaders"
       :items="tasks"
-      :pagination.sync="pagination"
-      :total-items="taskTotalCount"
-      :loading="taskLoading")
+      :rows-per-page-items="rowsPerPageItems"
+      :pagination.sync="localPagination"
+      :total-items="tasksTotalCount"
+      :loading="tasksLoading")
       template(slot="items" slot-scope="props")
         td {{ props.item.id }}
         td {{ props.item.title }}
@@ -26,18 +27,72 @@
 </template>
 
 <script lang="ts">
-import { Component, Watch, Vue } from 'nuxt-property-decorator'
+import { Component, Prop, Watch, Vue } from 'nuxt-property-decorator'
+import qs from 'qs'
+import snakecaseKeys from 'snakecase-keys'
 import { ITask } from '~/models/task'
+import {
+  IVDataTablePagination,
+  VDataTablePagination
+} from '~/models/v-data-table-pagination'
 import { TasksStore } from '~/store'
 
 @Component
 export default class TaskListComponent extends Vue {
+  @Prop({ type: Array, required: true })
+  tasks!: ITask[]
+
+  @Prop({ type: Number, required: true })
+  tasksTotalCount!: number
+
+  @Prop({ type: Boolean, required: true })
+  tasksLoading!: boolean
+
+  @Prop({ type: Object, required: true })
+  query!: { [key: string]: any }
+
+  @Prop({ type: Object, required: true })
+  pagination!: IVDataTablePagination
+
   tasksStore = TasksStore
   taskHeaders: { [key: string]: any }[] = []
-  tasks: ITask[] = []
-  taskTotalCount = 0
-  taskLoading = true
-  pagination: { [key: string]: any } = {}
+  rowsPerPageItems = [5, 10, 25]
+  localPagination: { [key: string]: any } = {}
+
+  @Watch('pagination', { deep: true })
+  onChangePagination(
+    val: IVDataTablePagination,
+    oldVal: IVDataTablePagination
+  ) {
+    if (!val.equals(oldVal)) {
+      this.localPagination = val.clone()
+    }
+  }
+
+  @Watch('localPagination', { deep: true })
+  onLocalPagination(val: IVDataTablePagination, oldVal: IVDataTablePagination) {
+    const valPagination = new VDataTablePagination(val)
+    const oldValPagination = new VDataTablePagination(oldVal)
+    if (!valPagination.equals(oldValPagination)) {
+      this.$emit('update:pagination', valPagination)
+
+      const query = {
+        q: this.query,
+        page: valPagination.page,
+        perPage: valPagination.rowsPerPage
+      }
+      if (valPagination.sortBy) {
+        query.q.s = `${valPagination.sortBy} ${
+          valPagination.descending ? 'desc' : 'asc'
+        }`
+      }
+      this.$router.push(
+        `/tasks?${qs.stringify(snakecaseKeys(query), {
+          arrayFormat: 'brackets'
+        })}`
+      )
+    }
+  }
 
   created() {
     this.taskHeaders = [
@@ -69,34 +124,8 @@ export default class TaskListComponent extends Vue {
     ]
   }
 
-  @Watch('pagination', { deep: true })
-  onPagination(_val: { [key: string]: any }, _oldVal: { [key: string]: any }) {
-    this.getTasks()
-  }
-
-  async getTasks() {
-    this.taskLoading = true
-    const { sortBy, descending, page, rowsPerPage } = this.pagination
-    const params: { [key: string]: any } = { page, perPage: rowsPerPage }
-    if (sortBy) {
-      if (!params.q) {
-        params.q = {}
-      }
-      params.q.s = `${sortBy} ${descending ? 'desc' : 'asc'}`
-    }
-    await this.tasksStore.getTasks({ params })
-
-    if (!this.tasksStore.got) {
-      const message = this.$t('messages.errorOccurred').toString()
-      this.$toast.error(message)
-      this.$log.error(this.tasksStore.errorStatus)
-      this.$log.error(this.tasksStore.errorData)
-    }
-
-    this.tasks = this.tasksStore.tasks
-    const tasksMeta = this.tasksStore.tasksMeta
-    this.taskTotalCount = tasksMeta.totalCount
-    this.taskLoading = false
+  mounted() {
+    this.localPagination = this.pagination
   }
 
   showTask(task: ITask) {
@@ -115,7 +144,7 @@ export default class TaskListComponent extends Vue {
           model: this.$t('models.task')
         }).toString()
         this.$toast.success(message)
-        this.getTasks()
+        this.$emit('getTasks')
       } else {
         const message = this.$t('messages.errorOccurred').toString()
         this.$toast.error(message)

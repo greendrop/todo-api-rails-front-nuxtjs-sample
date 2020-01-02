@@ -7,7 +7,6 @@ import ja from '~/locales/ja'
 import TaskListComponent from '~/components/organisms/TaskListComponent.vue'
 import { Task } from '~/models/task'
 import { datetime, truncate } from '~/lib/filters'
-import { PaginateMeta } from '~/models/paginate-meta'
 
 Vue.use(Vuetify)
 const localVue = createLocalVue()
@@ -28,10 +27,6 @@ describe('TaskListComponent', () => {
 
   describe('methods', () => {
     const tasksStore = {
-      getTasks: jest.fn(),
-      tasksMeta: new PaginateMeta(),
-      totalCount: 0,
-      got: true,
       deleteTask: jest.fn(),
       deleted: true
     }
@@ -56,32 +51,6 @@ describe('TaskListComponent', () => {
       }
     })
     const vm = wrapper.vm as any
-
-    describe('getTasks', () => {
-      describe('when got is true', () => {
-        beforeEach(() => {
-          tasksStore.got = true
-        })
-
-        test('not call toast.error', async () => {
-          await vm.getTasks()
-          expect(tasksStore.getTasks).toHaveBeenCalled()
-          expect(toast.error).not.toHaveBeenCalled()
-        })
-      })
-
-      describe('when got is false', () => {
-        beforeEach(() => {
-          tasksStore.got = false
-        })
-
-        test('called toast.error', async () => {
-          await vm.getTasks()
-          expect(tasksStore.getTasks).toHaveBeenCalled()
-          expect(toast.error).toHaveBeenCalled()
-        })
-      })
-    })
 
     test('showTask', async () => {
       const task = new Task()
