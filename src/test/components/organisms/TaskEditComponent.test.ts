@@ -66,6 +66,7 @@ describe('TaskEditComponent', () => {
         $router: router
       }
     })
+    const vm = wrapper.vm as any
 
     describe('submit', () => {
       describe('when updated is true', () => {
@@ -75,7 +76,6 @@ describe('TaskEditComponent', () => {
 
         test('called router.push', async () => {
           window.confirm = jest.fn().mockImplementation(() => true)
-          const vm = wrapper.vm as any
           await vm.submit()
           expect(tasksStore.updateTask).toHaveBeenCalled()
           expect(router.push).toHaveBeenCalled()
@@ -89,7 +89,6 @@ describe('TaskEditComponent', () => {
 
         test('called toast.error', async () => {
           window.confirm = jest.fn().mockImplementation(() => true)
-          const vm = wrapper.vm as any
           await vm.submit()
           expect(tasksStore.updateTask).toHaveBeenCalled()
           expect(toast.error).toHaveBeenCalled()

@@ -27,7 +27,8 @@ describe('Index', () => {
       getTasks: jest.fn(),
       tasksMeta: new PaginateMeta(),
       totalCount: 0,
-      got: true
+      got: true,
+      tasks: []
     }
     const toast = {
       success: jest.fn(),
@@ -50,6 +51,39 @@ describe('Index', () => {
       }
     })
     const vm = wrapper.vm as any
+
+    describe('asyncData', () => {
+      const context = {
+        route: { params: {} }
+      }
+
+      describe('when process.client is true', () => {
+        beforeEach(() => {
+          process.client = true
+        })
+
+        test('returns requestGetTasks', async () => {
+          const data = await vm.$options.asyncData(context, {
+            tasksStore
+          })
+          assert.strictEqual(data.requestGetTasks, true)
+        })
+      })
+
+      describe('when process.client is false', () => {
+        beforeEach(() => {
+          process.client = false
+        })
+
+        test('returns tasks', async () => {
+          const data = await vm.$options.asyncData(context, {
+            tasksStore
+          })
+          expect(tasksStore.getTasks).toHaveBeenCalled()
+          assert.deepStrictEqual(data.tasks, tasksStore.tasks)
+        })
+      })
+    })
 
     describe('getTasks', () => {
       describe('when got is true', () => {

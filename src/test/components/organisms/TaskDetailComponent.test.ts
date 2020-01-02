@@ -60,6 +60,7 @@ describe('TaskDetailComponent', () => {
         $router: router
       }
     })
+    const vm = wrapper.vm as any
 
     describe('deleteTask', () => {
       describe('when deleted is true', () => {
@@ -69,7 +70,6 @@ describe('TaskDetailComponent', () => {
 
         test('called router.push', async () => {
           window.confirm = jest.fn().mockImplementation(() => true)
-          const vm = wrapper.vm as any
           await vm.deleteTask(task)
           expect(tasksStore.deleteTask).toHaveBeenCalled()
           expect(router.push).toHaveBeenCalled()
@@ -83,7 +83,6 @@ describe('TaskDetailComponent', () => {
 
         test('called toast.error', async () => {
           window.confirm = jest.fn().mockImplementation(() => true)
-          const vm = wrapper.vm as any
           await vm.deleteTask(task)
           expect(tasksStore.deleteTask).toHaveBeenCalled()
           expect(toast.error).toHaveBeenCalled()

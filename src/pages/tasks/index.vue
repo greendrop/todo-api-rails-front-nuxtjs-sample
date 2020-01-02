@@ -46,7 +46,8 @@ import TaskListComponent from '~/components/organisms/TaskListComponent.vue'
 @Component({
   components: { TaskListComponent },
   middleware: 'auth',
-  async asyncData(context: Context) {
+  async asyncData(context: Context, options = {}) {
+    const tasksStore = options.tasksStore || TasksStore
     const data = {
       tasks: [] as ITask[],
       tasksTotalCount: 0,
@@ -84,9 +85,9 @@ import TaskListComponent from '~/components/organisms/TaskListComponent.vue'
       if (sortBy) {
         params.q.s = `${sortBy} ${descending ? 'desc' : 'asc'}`
       }
-      await TasksStore.getTasks({ params })
-      data.tasks = TasksStore.tasks
-      const tasksMeta = TasksStore.tasksMeta
+      await tasksStore.getTasks({ params })
+      data.tasks = tasksStore.tasks
+      const tasksMeta = tasksStore.tasksMeta
       data.tasksTotalCount = tasksMeta.totalCount
     }
     return data

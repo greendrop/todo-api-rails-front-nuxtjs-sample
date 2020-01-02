@@ -29,7 +29,8 @@ import { TasksStore } from '~/store'
 @Component({
   components: { TaskDetailComponent },
   middleware: 'auth',
-  async asyncData(context: Context) {
+  async asyncData(context: Context, options = {}) {
+    const tasksStore = options.tasksStore || TasksStore
     const data = {
       task: new Task(),
       taskLoading: false,
@@ -38,8 +39,8 @@ import { TasksStore } from '~/store'
     if (process.client) {
       data.requestGetTask = true
     } else {
-      await TasksStore.getTaskById({ id: parseInt(context.route.params.id) })
-      data.task = TasksStore.task
+      await tasksStore.getTaskById({ id: parseInt(context.route.params.id) })
+      data.task = tasksStore.task
       data.taskLoading = false
     }
     return data
@@ -96,7 +97,7 @@ export default class Index extends Vue {
       this.$log.error(this.tasksStore.errorData)
     }
 
-    this.task = TasksStore.task
+    this.task = this.tasksStore.task
     this.taskLoading = false
   }
 }
