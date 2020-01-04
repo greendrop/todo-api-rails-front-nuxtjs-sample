@@ -40,6 +40,9 @@ import { TasksStore } from '~/store'
       data.requestGetTask = true
     } else {
       await tasksStore.getTaskById({ id: parseInt(context.route.params.id) })
+      if (!tasksStore.got) {
+        throw new Error((tasksStore.errorStatus || 500).toString())
+      }
       data.task = tasksStore.task
       data.taskLoading = false
     }
@@ -99,10 +102,7 @@ export default class Edit extends Vue {
     await this.tasksStore.getTaskById({ id: parseInt(this.$route.params.id) })
 
     if (!this.tasksStore.got) {
-      const message = this.$t('messages.errorOccurred').toString()
-      this.$toast.error(message)
-      this.$log.error(this.tasksStore.errorStatus)
-      this.$log.error(this.tasksStore.errorData)
+      throw new Error((this.tasksStore.errorStatus || 500).toString())
     }
 
     this.task = this.tasksStore.task

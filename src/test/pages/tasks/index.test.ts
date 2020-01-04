@@ -91,10 +91,9 @@ describe('Index', () => {
           tasksStore.got = true
         })
 
-        test('not call toast.error', async () => {
+        test('not throw error', async () => {
           await vm.getTasks()
           expect(tasksStore.getTasks).toHaveBeenCalled()
-          expect(toast.error).not.toHaveBeenCalled()
         })
       })
 
@@ -103,10 +102,8 @@ describe('Index', () => {
           tasksStore.got = false
         })
 
-        test('called toast.error', async () => {
-          await vm.getTasks()
-          expect(tasksStore.getTasks).toHaveBeenCalled()
-          expect(toast.error).toHaveBeenCalled()
+        test('throw error', async () => {
+          await expect(vm.getTasks()).rejects.toThrow()
         })
       })
     })
