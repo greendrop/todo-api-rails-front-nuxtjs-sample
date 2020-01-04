@@ -86,6 +86,9 @@ import TaskListComponent from '~/components/organisms/TaskListComponent.vue'
         params.q.s = `${sortBy} ${descending ? 'desc' : 'asc'}`
       }
       await tasksStore.getTasks({ params })
+      if (!tasksStore.got) {
+        throw new Error((tasksStore.errorStatus || 500).toString())
+      }
       data.tasks = tasksStore.tasks
       const tasksMeta = tasksStore.tasksMeta
       data.tasksTotalCount = tasksMeta.totalCount
@@ -138,10 +141,7 @@ export default class Index extends Vue {
     await this.tasksStore.getTasks({ params })
 
     if (!this.tasksStore.got) {
-      const message = this.$t('messages.errorOccurred').toString()
-      this.$toast.error(message)
-      this.$log.error(this.tasksStore.errorStatus)
-      this.$log.error(this.tasksStore.errorData)
+      throw new Error((this.tasksStore.errorStatus || 500).toString())
     }
 
     this.tasks = this.tasksStore.tasks

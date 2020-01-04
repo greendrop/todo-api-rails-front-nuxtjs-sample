@@ -119,12 +119,8 @@ describe('Edit', () => {
           tasksStore.got = false
         })
 
-        test('called toast.error', async () => {
-          await vm.getTask()
-          expect(tasksStore.getTaskById).toHaveBeenCalledWith({
-            id: route.params.id
-          })
-          expect(toast.error).toHaveBeenCalled()
+        test('throw error', async () => {
+          await expect(vm.getTask()).rejects.toThrow()
         })
       })
     })

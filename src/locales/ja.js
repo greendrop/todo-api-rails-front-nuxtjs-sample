@@ -24,7 +24,10 @@ export default {
     destroyModel: '{model}を削除しました。',
     signedIn: 'ログインしました。',
     signedOut: 'ログアウトしました。',
-    errorOccurred: 'エラーが発生しました。'
+    errorOccurred: 'エラーが発生しました。',
+    unauthorized: '認証に失敗しました。',
+    notFound: '見つかりませんでした。',
+    internalServerError: 'エラーが発生しました。'
   },
   models: {
     task: 'タスク',
