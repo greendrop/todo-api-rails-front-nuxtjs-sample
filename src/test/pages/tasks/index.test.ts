@@ -40,6 +40,9 @@ describe('Index', () => {
     const router = {
       push: jest.fn()
     }
+    const nuxt = {
+      error: jest.fn()
+    }
     const wrapper = shallowMount(Index, {
       i18n,
       localVue,
@@ -47,14 +50,18 @@ describe('Index', () => {
         tasksStore,
         $toast: toast,
         $log: log,
-        $router: router
+        $router: router,
+        $nuxt: nuxt
       }
     })
     const vm = wrapper.vm as any
 
     describe('asyncData', () => {
       const context = {
-        route: { params: {} }
+        route: { params: {} },
+        app: {
+          $nuxt: nuxt
+        }
       }
 
       describe('when process.client is true', () => {
@@ -91,9 +98,10 @@ describe('Index', () => {
           tasksStore.got = true
         })
 
-        test('not throw error', async () => {
+        test('not call $nuxt.error', async () => {
           await vm.getTasks()
           expect(tasksStore.getTasks).toHaveBeenCalled()
+          expect(nuxt.error).not.toHaveBeenCalled()
         })
       })
 
@@ -102,8 +110,10 @@ describe('Index', () => {
           tasksStore.got = false
         })
 
-        test('throw error', async () => {
-          await expect(vm.getTasks()).rejects.toThrow()
+        test('called $nuxt.error', async () => {
+          await vm.getTasks()
+          expect(tasksStore.getTasks).toHaveBeenCalled()
+          expect(nuxt.error).toHaveBeenCalled()
         })
       })
     })

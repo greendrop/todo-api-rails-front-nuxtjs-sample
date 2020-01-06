@@ -53,6 +53,9 @@ describe('Edit', () => {
     const router = {
       push: jest.fn()
     }
+    const nuxt = {
+      error: jest.fn()
+    }
     const wrapper = shallowMount(Edit, {
       i18n,
       localVue,
@@ -61,14 +64,18 @@ describe('Edit', () => {
         $toast: toast,
         $log: log,
         $route: route,
-        $router: router
+        $router: router,
+        $nuxt: nuxt
       }
     })
     const vm = wrapper.vm as any
 
     describe('asyncData', () => {
       const context = {
-        route
+        route,
+        app: {
+          $nuxt: nuxt
+        }
       }
 
       describe('when process.client is true', () => {
@@ -107,10 +114,10 @@ describe('Edit', () => {
           tasksStore.got = true
         })
 
-        test('not call toast.error', async () => {
+        test('not call $nuxt.error', async () => {
           await vm.getTask()
           expect(tasksStore.getTaskById).toHaveBeenCalledWith({ id: 1 })
-          expect(toast.error).not.toHaveBeenCalled()
+          expect(nuxt.error).not.toHaveBeenCalled()
         })
       })
 
@@ -119,8 +126,10 @@ describe('Edit', () => {
           tasksStore.got = false
         })
 
-        test('throw error', async () => {
-          await expect(vm.getTask()).rejects.toThrow()
+        test('called $nuxt.error', async () => {
+          await vm.getTask()
+          expect(tasksStore.getTaskById).toHaveBeenCalledWith({ id: 1 })
+          expect(nuxt.error).toHaveBeenCalled()
         })
       })
     })

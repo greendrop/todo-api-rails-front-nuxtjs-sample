@@ -87,7 +87,10 @@ import TaskListComponent from '~/components/organisms/TaskListComponent.vue'
       }
       await tasksStore.getTasks({ params })
       if (!tasksStore.got) {
-        throw new Error((tasksStore.errorStatus || 500).toString())
+        context.app.$nuxt.error({
+          statusCode: tasksStore.errorStatus || 500,
+          message: tasksStore.errorData || ''
+        })
       }
       data.tasks = tasksStore.tasks
       const tasksMeta = tasksStore.tasksMeta
@@ -141,7 +144,10 @@ export default class Index extends Vue {
     await this.tasksStore.getTasks({ params })
 
     if (!this.tasksStore.got) {
-      throw new Error((this.tasksStore.errorStatus || 500).toString())
+      this.$nuxt.error({
+        statusCode: this.tasksStore.errorStatus || 500,
+        message: this.tasksStore.errorData || ''
+      })
     }
 
     this.tasks = this.tasksStore.tasks

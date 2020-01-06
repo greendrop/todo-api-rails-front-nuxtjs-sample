@@ -41,7 +41,10 @@ import { TasksStore } from '~/store'
     } else {
       await tasksStore.getTaskById({ id: parseInt(context.route.params.id) })
       if (!tasksStore.got) {
-        throw new Error((tasksStore.errorStatus || 500).toString())
+        context.app.$nuxt.error({
+          statusCode: tasksStore.errorStatus || 500,
+          message: tasksStore.errorData || ''
+        })
       }
       data.task = tasksStore.task
       data.taskLoading = false
@@ -102,7 +105,10 @@ export default class Edit extends Vue {
     await this.tasksStore.getTaskById({ id: parseInt(this.$route.params.id) })
 
     if (!this.tasksStore.got) {
-      throw new Error((this.tasksStore.errorStatus || 500).toString())
+      this.$nuxt.error({
+        statusCode: this.tasksStore.errorStatus || 500,
+        message: this.tasksStore.errorData || ''
+      })
     }
 
     this.task = this.tasksStore.task
