@@ -49,3 +49,23 @@ set :nodenv_node, File.read('.node-version').strip
 set :nodenv_prefix, "NODENV_ROOT=#{fetch(:nodenv_path)} NODENV_VERSION=#{fetch(:nodenv_node)} #{fetch(:nodenv_path)}/bin/nodenv exec"
 set :nodenv_map_bins, %w[node npm yarn yarnpkg]
 set :nodenv_roles, :all
+
+
+namespace :deploy do
+  desc 'Build application'
+  task :build do
+    on roles(:app) do
+      invoke 'nuxt:build'
+    end
+  end
+
+  desc 'Restart application'
+  task :build do
+    on roles(:app), in: :sequence, wait: 5 do
+      invoke 'nuxt:restart'
+    end
+  end
+
+  after :publishing, :build
+  after :build, :restart
+end
