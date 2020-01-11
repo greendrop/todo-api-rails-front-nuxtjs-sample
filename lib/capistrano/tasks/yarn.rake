@@ -2,7 +2,9 @@ namespace :yarn do
   desc 'Install'
   task :install do
     on roles(:app) do
-      execute "cd #{release_path}; yarn install"
+      within release_path do
+        execute :yarn, :install
+      end
     end
   end
 end

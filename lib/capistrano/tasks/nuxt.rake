@@ -6,7 +6,9 @@ namespace :nuxt do
   desc 'Build'
   task :build do
     on roles(:app) do
-      execute "cd #{release_path}; yarn run build"
+      within release_path do
+        execute :yarn, :run, :build
+      end
     end
   end
 
