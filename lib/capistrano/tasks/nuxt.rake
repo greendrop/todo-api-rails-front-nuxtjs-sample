@@ -1,12 +1,12 @@
 namespace :nuxt do
   def nuxt_execute(cmd)
-    execute :sudo, :systemctl, cmd, "#{fetch(:application)}-nuxt"
+    execute :sudo, :systemctl, cmd, "#{fetch(:application)}"
   end
 
   desc 'Build'
   task :build do
     on roles(:app) do
-      execute 'yarn run build'
+      execute "cd #{release_path}; yarn run build"
     end
   end
 
