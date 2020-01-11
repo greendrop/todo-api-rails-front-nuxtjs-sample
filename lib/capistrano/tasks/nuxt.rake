@@ -31,3 +31,5 @@ namespace :nuxt do
     end
   end
 end
+
+after 'deploy:updated', 'nuxt:build'

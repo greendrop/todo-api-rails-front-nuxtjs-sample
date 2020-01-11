@@ -6,3 +6,5 @@ namespace :yarn do
     end
   end
 end
+
+before 'deploy:updated', 'yarn:install'
