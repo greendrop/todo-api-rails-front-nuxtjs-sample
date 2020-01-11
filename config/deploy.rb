@@ -51,21 +51,31 @@ set :nodenv_map_bins, %w[node npm yarn yarnpkg]
 set :nodenv_roles, :all
 
 
-namespace :deploy do
-  desc 'Build application'
+namespace :yarn do
+  desc 'Install'
+  task :install do
+    on roles(:app) do
+      invoke 'yarn:install'
+    end
+  end
+end
+
+namespace :nuxt do
+  desc 'Build'
   task :build do
     on roles(:app) do
       invoke 'nuxt:build'
     end
   end
 
-  desc 'Restart application'
+  desc 'Restart'
   task :build do
     on roles(:app), in: :sequence, wait: 5 do
       invoke 'nuxt:restart'
     end
   end
-
-  after :publishing, :build
-  after :build, :restart
 end
+
+after 'deploy:updated', 'yarn:install'
+after 'yarn:install', 'nuxt:build'
+after 'deploy:publishing', 'nuxt:restart'

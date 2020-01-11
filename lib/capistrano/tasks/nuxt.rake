@@ -3,28 +3,28 @@ namespace :nuxt do
     execute :sudo, :systemctl, cmd, "#{fetch(:application)}-nuxt"
   end
 
-  desc 'Build nuxt application'
+  desc 'Build'
   task :build do
     on roles(:app) do
       execute 'yarn run build'
     end
   end
 
-  desc 'Start nuxt application'
+  desc 'Start'
   task :start do
     on roles(:app) do
       nuxt_execute(:start)
     end
   end
 
-  desc 'Stop nuxt application'
+  desc 'Stop'
   task :stop do
     on roles(:app) do
       nuxt_execute(:stop)
     end
   end
 
-  desc 'Restart nuxt application'
+  desc 'Restart'
   task :restart do
     on roles(:app) do
       nuxt_execute(:restart)
