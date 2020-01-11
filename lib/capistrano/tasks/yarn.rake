@@ -1,6 +1,6 @@
 namespace :yarn do
   desc 'Install'
-  task :build do
+  task :install do
     on roles(:app) do
       execute 'yarn install'
     end
