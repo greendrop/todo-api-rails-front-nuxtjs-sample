@@ -68,7 +68,7 @@
     "nodemon": "^1.19.3",
     "power-assert": "^1.6.1",
     "prettier": "^1.18.2",
-    "pug": "^2.0.4",
+    "pug": "^3.0.1",
     "pug-lint": "^2.6.0",
     "pug-lint-vue": "^0.3.0",
     "pug-plain-loader": "^1.0.0",
