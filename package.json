@@ -27,7 +27,7 @@
     "camelcase-keys": "^6.1.1",
     "cookie-universal-nuxt": "^2.0.18",
     "cross-env": "^5.2.1",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "nuxt": "^2.10.1",
     "nuxt-i18n": "^6.3.0",
     "nuxt-logger": "^0.2.0",
