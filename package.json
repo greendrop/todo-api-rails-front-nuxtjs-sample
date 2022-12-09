@@ -32,7 +32,7 @@
     "nuxt-i18n": "^6.3.0",
     "nuxt-logger": "^0.2.0",
     "nuxt-property-decorator": "^2.5.0",
-    "qs": "^6.9.0",
+    "qs": "^6.9.7",
     "snakecase-keys": "^3.1.0",
     "vee-validate": "^2.2.15",
     "vuetify": "^1.5.18",
